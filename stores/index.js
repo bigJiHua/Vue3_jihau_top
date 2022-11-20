@@ -1,4 +1,4 @@
-import { defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 
 // 將其命名為useXXXStore，就像vue3的composable一樣
 const useStore = defineStore('main', {
@@ -25,4 +25,4 @@ const useStore = defineStore('main', {
   },
   getters: {},
 })
-export default useStore
+export default { useStore }

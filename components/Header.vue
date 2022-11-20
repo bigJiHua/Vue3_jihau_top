@@ -97,15 +97,29 @@
 </template>
 
 <script setup>
-import { useStore } from '@/stores/index'
 import { ref, onMounted } from 'vue'
 const istop = ref(false)
+const userStore = useStore()
+console.log(userStore)
 // mounted
 onMounted(() => {
-  console.log(useStore)
   const token = ref(localStorage.getItem('token'))
   const User = ref(localStorage.getItem('Username'))
   const Useridentity = ref(localStorage.getItem('Useridentity'))
+
+  const Ctrldemo = ref(document.querySelectorAll('.Ctrldemo'))
+  const style = ref(localStorage.getItem('bgc'))
+  const bgc = ref($store.state.bgc)
+
+  const more_site = ref($refs.more_something)
+  const more_site_son = ref($refs.dropdown_menu)
+
+  const btnList = ref($refs.btn_list)
+  const menubox = ref($refs.menubox)
+  const moresite = ref($refs.more_something)
+
+  const indexHeader = ref($refs.headertotop)
+
   window.addEventListener('scroll', HeaderTop)
   const setcolor = (demo, color) => {
     const demos = document.querySelectorAll(`${demo}`)
@@ -116,103 +130,83 @@ onMounted(() => {
   // 设置主题样式
   setTimeout(() => {
     setInterval(() => {
-      this.$nextTick(() => {
-        const Ctrldemo = document.querySelectorAll('.Ctrldemo')
-        const style = localStorage.getItem('bgc')
-        const bgc = $store.state.bgc
-        if (style) {
-          for (let i = 0; i < Ctrldemo.length; i++) {
-            Ctrldemo[i].style.background = `${style}`
-            setcolor('h1', 'rgb(240,240,240)')
-            setcolor('.menu-item > a', 'rgb(240,240,240)')
-            setcolor('.article_alltitle > span', 'rgb(240,240,240)')
-            setcolor('.nav > li > a', 'rgb(240,240,240)')
-            setcolor('#User > p > span', 'rgb(240,240,240)')
-            setcolor('#cagUsers > p > span', 'rgb(240,240,240)')
-            setcolor('.ararc_title', 'rgb(240,240,240)')
-            setcolor('.UserselfArea > p', 'rgb(240,240,240)')
-            setcolor('.card > p', 'rgb(240,240,240)')
-          }
-        } else if (!style && bgc !== '' && bgc !== null) {
-          for (let i = 0; i < Ctrldemo.length; i++) {
-            Ctrldemo[i].style.background = `${bgc}`
-            setcolor('h1', 'rgb(240,240,240)')
-            setcolor('.menu-item > a', 'rgb(240,240,240)')
-            setcolor('.article_alltitle > span', 'rgb(240,240,240)')
-            setcolor('.nav > li > a', 'rgb(240,240,240)')
-            setcolor('#User > p > span', 'rgb(240,240,240)')
-            setcolor('#cagUsers > p > span', 'rgb(240,240,240)')
-            setcolor('.ararc_title', 'rgb(240,240,240)')
-            setcolor('#introduce_doc > p', 'rgb(240,240,240)')
-            setcolor('.UserselfArea > p', 'rgb(240,240,240)')
-            setcolor('.card > p', 'rgb(240,240,240)')
-          }
+      if (style) {
+        for (let i = 0; i < Ctrldemo.length; i++) {
+          Ctrldemo[i].style.background = `${style}`
+          setcolor('h1', 'rgb(240,240,240)')
+          setcolor('.menu-item > a', 'rgb(240,240,240)')
+          setcolor('.article_alltitle > span', 'rgb(240,240,240)')
+          setcolor('.nav > li > a', 'rgb(240,240,240)')
+          setcolor('#User > p > span', 'rgb(240,240,240)')
+          setcolor('#cagUsers > p > span', 'rgb(240,240,240)')
+          setcolor('.ararc_title', 'rgb(240,240,240)')
+          setcolor('.UserselfArea > p', 'rgb(240,240,240)')
+          setcolor('.card > p', 'rgb(240,240,240)')
         }
-      })
+      } else if (!style && bgc !== '' && bgc !== null) {
+        for (let i = 0; i < Ctrldemo.length; i++) {
+          Ctrldemo[i].style.background = `${bgc}`
+          setcolor('h1', 'rgb(240,240,240)')
+          setcolor('.menu-item > a', 'rgb(240,240,240)')
+          setcolor('.article_alltitle > span', 'rgb(240,240,240)')
+          setcolor('.nav > li > a', 'rgb(240,240,240)')
+          setcolor('#User > p > span', 'rgb(240,240,240)')
+          setcolor('#cagUsers > p > span', 'rgb(240,240,240)')
+          setcolor('.ararc_title', 'rgb(240,240,240)')
+          setcolor('#introduce_doc > p', 'rgb(240,240,240)')
+          setcolor('.UserselfArea > p', 'rgb(240,240,240)')
+          setcolor('.card > p', 'rgb(240,240,240)')
+        }
+      }
     }, 200)
   }, 200)
 })
-
 // methods
 function listMenu() {
-  this.$nextTick(() => {
-    // eslint-disable-next-line camelcase
-    const more_site = $refs.more_something
-    // eslint-disable-next-line camelcase
-    const more_site_son = $refs.dropdown_menu
-    more_site.addEventListener('mouseenter', function () {
-      more_site.setAttribute('aria-expanded', 'ture')
-      // eslint-disable-next-line no-global-assign
-      open = more_site.parentNode
-      open.className = 'dropdown open'
-    })
-    more_site.addEventListener('mouseleave', function () {
-      more_site.setAttribute('aria-expanded', 'flase')
-      // eslint-disable-next-line no-global-assign
-      open = more_site.parentNode
-      open.className = 'dropdown'
-    })
-    more_site_son.addEventListener('mouseenter', function () {
-      more_site.setAttribute('aria-expanded', 'ture')
-      // eslint-disable-next-line no-global-assign
-      open = more_site.parentNode
-      open.className = 'dropdown open'
-    })
-    more_site_son.addEventListener('mouseleave', function () {
-      more_site.setAttribute('aria-expanded', 'flase')
-      // eslint-disable-next-line no-global-assign
-      open = more_site.parentNode
-      open.className = 'dropdown'
-    })
+  more_site.addEventListener('mouseenter', function () {
+    more_site.setAttribute('aria-expanded', 'ture')
+    // eslint-disable-next-line no-global-assign
+    open = more_site.parentNode
+    open.className = 'dropdown open'
+  })
+  more_site.addEventListener('mouseleave', function () {
+    more_site.setAttribute('aria-expanded', 'flase')
+    // eslint-disable-next-line no-global-assign
+    open = more_site.parentNode
+    open.className = 'dropdown'
+  })
+  more_site_son.addEventListener('mouseenter', function () {
+    more_site.setAttribute('aria-expanded', 'ture')
+    // eslint-disable-next-line no-global-assign
+    open = more_site.parentNode
+    open.className = 'dropdown open'
+  })
+  more_site_son.addEventListener('mouseleave', function () {
+    more_site.setAttribute('aria-expanded', 'flase')
+    // eslint-disable-next-line no-global-assign
+    open = more_site.parentNode
+    open.className = 'dropdown'
   })
 }
 function closeMenu() {
-  this.$nextTick(() => {
-    const btnList = $refs.btn_list
-    const menubox = $refs.menubox
-    const moresite = $refs.more_something
-  })
   btnList.setAttribute('aria-expanded', 'flase')
   moresite.setAttribute('aria-expanded', 'flase')
   btnList.setAttribute('class', 'navbar-toggle collapsed')
   menubox.setAttribute('class', 'navbar-collapse collapse')
 }
 function HeaderTop() {
-  this.$nextTick(() => {
-    const indexHeader = $refs.headertotop
-    if (indexHeader) {
-      const scrollTop =
-        document.documentElement.scrollTop ||
-        window.pageYOffset ||
-        document.body.scrollTop
-      if (scrollTop >= 10) {
-        istop = true
-      }
-      if (scrollTop === 0) {
-        istop = false
-      }
+  if (indexHeader) {
+    const scrollTop =
+      document.documentElement.scrollTop ||
+      window.pageYOffset ||
+      document.body.scrollTop
+    if (scrollTop >= 10) {
+      istop = true
     }
-  })
+    if (scrollTop === 0) {
+      istop = false
+    }
+  }
 }
 function login() {
   closeMenu()
@@ -224,12 +218,10 @@ function login() {
 }
 function outlogin() {
   closeMenu()
-  this.$nextTick(() => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('Username')
-    localStorage.removeItem('Useridentity')
-    location.reload()
-  })
+  localStorage.removeItem('token')
+  localStorage.removeItem('Username')
+  localStorage.removeItem('Useridentity')
+  location.reload()
 }
 </script>
 

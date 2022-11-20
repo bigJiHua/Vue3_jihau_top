@@ -1,12 +1,20 @@
-import { defineNuxtConfig } from "nuxt";
 export default defineNuxtConfig({
+  
+  modules: [
+    '@pinia/nuxt'
+  ],
   app: {
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width,initial-scale=1.0',
       title: 'JiHua的Web和JS开发数据',
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: 'https://jihau.top/favicon.ico' }
+        { rel: 'icon', type: 'image/x-icon', href: 'https://jihau.top/favicon.ico' },
+        { rel: 'stylesheet', href: 'https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css'}
+      ],
+      script: [
+        { src: 'https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js'},
+        { src: 'https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js'}
       ],
       meta: [
         {
@@ -45,6 +53,5 @@ export default defineNuxtConfig({
         }
       ],
     }
-  },
-  buildModules: ["nuxt-windicss", "@pinia/nuxt"],
+  }
 })
