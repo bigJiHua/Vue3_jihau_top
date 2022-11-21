@@ -1,138 +1,39 @@
-<template>
-  <div
-    :class="['navbar-default', 'Ctrldemo', { header: istop, nheader: !istop }]"
-    id="indexHeader"
-    ref="headertotop"
-  >
-    <div class="navbar-header coker">
-      <button
-        type="button"
-        class="navbar-toggle collapsed"
-        data-toggle="collapse"
-        data-target="#navbar"
-        aria-expanded="false"
-        aria-controls="navbar"
-        ref="btn_list"
-      >
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <nuxt-link class="navbar-brand headerTitle" to="/">
-        <h1>JiHua的web和js开发数据</h1>
-      </nuxt-link>
-      <a href="https://jihau.top"
-        ><img src="https://www.jihau.top/img/logo.png" class="logo" alt="logo"
-      /></a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse Ctrldemo" ref="menubox">
-      <ul class="nav navbar-nav">
-        <li @click="closeMenu">
-          <nuxt-link to="/">主页</nuxt-link>
-        </li>
-        <li @click="closeMenu">
-          <a href="http://jihua.me">关于</a>
-        </li>
-        <li @click="closeMenu">
-          <nuxt-link to="/DevProcess">发展历程</nuxt-link>
-        </li>
-        <li @click="closeMenu">
-          <nuxt-link to="/SpsList">赞助·友链</nuxt-link>
-        </li>
-        <li class="dropdown">
-          <a
-            class="dropdown-toggle"
-            data-toggle="dropdown"
-            role="button"
-            aria-haspopup="true"
-            aria-expanded="false"
-            @mousemove.once="listMenu"
-            ref="more_something"
-            >更多<span class="caret"></span
-          ></a>
-          <ul class="dropdown-menu" ref="dropdown_menu">
-            <li>
-              <nuxt-link to="/checkver"
-                ><span @click="closeMenu">激活账户</span></nuxt-link
-              >
-            </li>
-            <li><a href="https://www.jihau.com">主站博客页面</a></li>
-            <li><a href="https://d0tc.com">C语言程序与设计</a></li>
-            <li>
-              <nuxt-link to="/page/YSZC"
-                ><span @click="closeMenu">隐私政策</span></nuxt-link
-              >
-            </li>
-            <li><a href="https://jihau.com/POP/">测试</a></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right right_btn">
-        <li @click="closeMenu">
-          <nuxt-link to="/Search">
-            <span
-              class="glyphicon glyphicon-search"
-              style="font-size: 20px"
-              @click="closeMenu"
-            ></span>
-          </nuxt-link>
-        </li>
-        <li @click="closeMenu">
-          <nuxt-link to="/CtrlView" v-show="token"
-            >欢迎{{ User }}{{ Useridentity }}</nuxt-link
-          >
-        </li>
-        <li>
-          <button @click="login" class="btn" v-if="!token">登录</button>
-          <button @click="outlogin" class="btn" v-if="token">
-            <a>退出登录</a>
-          </button>
-          <button v-if="token" class="btn" @click="closeMenu">
-            <nuxt-link to="/CtrlView">后台</nuxt-link>
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+import useStore from '@/stores/index'
 const istop = ref(false)
-const userStore = useStore()
-console.log(userStore)
 // mounted
 onMounted(() => {
+  const { proxy } = getCurrentInstance()
   const token = ref(localStorage.getItem('token'))
   const User = ref(localStorage.getItem('Username'))
   const Useridentity = ref(localStorage.getItem('Useridentity'))
 
   const Ctrldemo = ref(document.querySelectorAll('.Ctrldemo'))
   const style = ref(localStorage.getItem('bgc'))
-  const bgc = ref($store.state.bgc)
+  const bgc = ref(useStore.bgc)
 
-  const more_site = ref($refs.more_something)
-  const more_site_son = ref($refs.dropdown_menu)
+  const more_site = ref(proxy.$refs.more_something)
+  const more_site_son = ref(proxy.$refs.dropdown_menu)
 
-  const btnList = ref($refs.btn_list)
-  const menubox = ref($refs.menubox)
-  const moresite = ref($refs.more_something)
+  const btnList = ref(proxy.$refs.btn_list)
+  const menubox = ref(proxy.$refs.menubox)
+  const moresite = ref(proxy.$refs.more_something)
 
-  const indexHeader = ref($refs.headertotop)
+  const indexHeader = ref(proxy.$refs.headertotop)
 
   window.addEventListener('scroll', HeaderTop)
   const setcolor = (demo, color) => {
     const demos = document.querySelectorAll(`${demo}`)
-    for (let i = 0; i < demos.length; i++) {
+    for (let i = 0; i < demos.length; i++)
       demos[i].style.color = `${color}`
-    }
   }
   // 设置主题样式
   setTimeout(() => {
     setInterval(() => {
-      if (style) {
-        for (let i = 0; i < Ctrldemo.length; i++) {
-          Ctrldemo[i].style.background = `${style}`
+      if (style.value) {
+        for (let i = 0; i < Ctrldemo.value.length; i++) {
+          Ctrldemo[i].style.background = `${style.value}`
           setcolor('h1', 'rgb(240,240,240)')
           setcolor('.menu-item > a', 'rgb(240,240,240)')
           setcolor('.article_alltitle > span', 'rgb(240,240,240)')
@@ -143,9 +44,10 @@ onMounted(() => {
           setcolor('.UserselfArea > p', 'rgb(240,240,240)')
           setcolor('.card > p', 'rgb(240,240,240)')
         }
-      } else if (!style && bgc !== '' && bgc !== null) {
-        for (let i = 0; i < Ctrldemo.length; i++) {
-          Ctrldemo[i].style.background = `${bgc}`
+      }
+      else if (!style.value && bgc.value !== '' && bgc.value !== null) {
+        for (let i = 0; i < Ctrldemo.value.length; i++) {
+          Ctrldemo[i].style.background = `${bgc.value}`
           setcolor('h1', 'rgb(240,240,240)')
           setcolor('.menu-item > a', 'rgb(240,240,240)')
           setcolor('.article_alltitle > span', 'rgb(240,240,240)')
@@ -163,25 +65,25 @@ onMounted(() => {
 })
 // methods
 function listMenu() {
-  more_site.addEventListener('mouseenter', function () {
+  more_site.addEventListener('mouseenter', () => {
     more_site.setAttribute('aria-expanded', 'ture')
     // eslint-disable-next-line no-global-assign
     open = more_site.parentNode
     open.className = 'dropdown open'
   })
-  more_site.addEventListener('mouseleave', function () {
+  more_site.addEventListener('mouseleave', () => {
     more_site.setAttribute('aria-expanded', 'flase')
     // eslint-disable-next-line no-global-assign
     open = more_site.parentNode
     open.className = 'dropdown'
   })
-  more_site_son.addEventListener('mouseenter', function () {
+  more_site_son.addEventListener('mouseenter', () => {
     more_site.setAttribute('aria-expanded', 'ture')
     // eslint-disable-next-line no-global-assign
     open = more_site.parentNode
     open.className = 'dropdown open'
   })
-  more_site_son.addEventListener('mouseleave', function () {
+  more_site_son.addEventListener('mouseleave', () => {
     more_site.setAttribute('aria-expanded', 'flase')
     // eslint-disable-next-line no-global-assign
     open = more_site.parentNode
@@ -196,25 +98,23 @@ function closeMenu() {
 }
 function HeaderTop() {
   if (indexHeader) {
-    const scrollTop =
-      document.documentElement.scrollTop ||
-      window.pageYOffset ||
-      document.body.scrollTop
-    if (scrollTop >= 10) {
-      istop = true
-    }
-    if (scrollTop === 0) {
-      istop = false
-    }
+    const scrollTop
+      = document.documentElement.scrollTop
+      || window.pageYOffset
+      || document.body.scrollTop
+    if (scrollTop >= 10)
+      istop.value = true
+
+    if (scrollTop === 0)
+      istop.value = false
   }
 }
 function login() {
   closeMenu()
-  if (token) {
+  if (token)
     $router.push('/CtrlView')
-  } else {
+  else
     $router.push('/Login')
-  }
 }
 function outlogin() {
   closeMenu()
@@ -225,37 +125,130 @@ function outlogin() {
 }
 </script>
 
+<template>
+  <div id="indexHeader" ref="headertotop" class="navbar-default Ctrldemo" :class="[{ header: istop, nheader: !istop }]">
+    <div class="navbar-header coker">
+      <button
+        ref="btn_list" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+        aria-expanded="false" aria-controls="navbar"
+      >
+        <span class="icon-bar" />
+        <span class="icon-bar" />
+        <span class="icon-bar" />
+      </button>
+      <nuxt-link class="navbar-brand headerTitle" to="/">
+        <h1>JiHua的web和js开发数据</h1>
+      </nuxt-link>
+      <a href="https://jihau.top"><img src="https://www.jihau.top/img/logo.png" class="logo" alt="logo"></a>
+    </div>
+    <div id="navbar" ref="menubox" class="navbar-collapse collapse Ctrldemo">
+      <ul class="nav navbar-nav">
+        <li @click="closeMenu">
+          <nuxt-link to="/">
+            主页
+          </nuxt-link>
+        </li>
+        <li @click="closeMenu">
+          <a href="http://jihua.me">关于</a>
+        </li>
+        <li @click="closeMenu">
+          <nuxt-link to="/DevProcess">
+            发展历程
+          </nuxt-link>
+        </li>
+        <li @click="closeMenu">
+          <nuxt-link to="/SpsList">
+            赞助·友链
+          </nuxt-link>
+        </li>
+        <li class="dropdown">
+          <a
+            ref="more_something" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+            aria-expanded="false" @mousemove.once="listMenu"
+          >更多<span class="caret" /></a>
+          <ul ref="dropdown_menu" class="dropdown-menu">
+            <li>
+              <nuxt-link to="/checkver">
+                <span @click="closeMenu">激活账户</span>
+              </nuxt-link>
+            </li>
+            <li><a href="https://www.jihau.com">主站博客页面</a></li>
+            <li><a href="https://d0tc.com">C语言程序与设计</a></li>
+            <li>
+              <nuxt-link to="/page/YSZC">
+                <span @click="closeMenu">隐私政策</span>
+              </nuxt-link>
+            </li>
+            <li><a href="https://jihau.com/POP/">测试</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right right_btn">
+        <li @click="closeMenu">
+          <nuxt-link to="/Search">
+            <span class="glyphicon glyphicon-search" style="font-size: 20px" @click="closeMenu" />
+          </nuxt-link>
+        </li>
+        <li @click="closeMenu">
+          <nuxt-link v-show="token" to="/CtrlView">
+            欢迎{{ User }}{{ Useridentity }}
+          </nuxt-link>
+        </li>
+        <li>
+          <button v-if="!token" class="btn" @click="login">
+            登录
+          </button>
+          <button v-if="token" class="btn" @click="outlogin">
+            <a>退出登录</a>
+          </button>
+          <button v-if="token" class="btn" @click="closeMenu">
+            <nuxt-link to="/CtrlView">
+              后台
+            </nuxt-link>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
 <style lang="less" scoped>
 #navbar {
   font-size: 1.5rem;
   font-weight: bolder;
   background-color: rgba(255, 255, 255, 0);
 }
+
 @media only screen and (min-width: 755px) {
   #indexHeader {
     transition: all 0.5s;
   }
+
   .logo {
     width: 45px;
     height: 40px;
     margin: 5px 0 10px 0;
   }
-  .coker > a > h1 {
+
+  .coker>a>h1 {
     font-size: 3rem !important;
     padding: 0;
     margin: 0;
   }
+
   .right_btn {
     display: flex !important;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
   }
+
   .nheader {
     background-color: rgba(255, 255, 255, 0);
     width: 98vw;
     margin: 0 auto;
   }
+
   .header {
     position: fixed;
     top: -1px;
@@ -266,6 +259,7 @@ function outlogin() {
     background-color: #f8f8f8;
   }
 }
+
 @media only screen and (max-width: 755px) {
   #indexHeader {
     position: fixed;
@@ -274,22 +268,26 @@ function outlogin() {
     top: 0;
     left: 0;
   }
+
   .logo {
     width: 34px;
     height: 28px;
     margin: 10px 0 10px 0;
   }
-  .coker > a > h1 {
+
+  .coker>a>h1 {
     font-size: 2.5rem;
     padding: 0;
     margin: 0;
   }
+
   #navbar {
     position: absolute;
     z-index: 999;
     background-color: rgba(255, 255, 255, 0.9);
     width: 100%;
   }
+
   .header {
     position: fixed;
     top: -1px;
@@ -299,16 +297,19 @@ function outlogin() {
     width: 100vw;
   }
 }
+
 @media only screen and (max-width: 370px) {
-  .coker > a > h1 {
+  .coker>a>h1 {
     font-size: 2rem;
   }
 }
+
 @media only screen and (max-width: 280px) {
   .logo {
     display: none;
   }
-  .coker > a > h1 {
+
+  .coker>a>h1 {
     font-size: 1.6rem;
   }
 }
